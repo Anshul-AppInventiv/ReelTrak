@@ -8,20 +8,25 @@ import {
   FlatList,
   TextInput,
   Image,
+  useColorScheme,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {styles} from './styles';
+import {Styles} from './styles';
 import {Icons} from '../../assets';
 import {studioData} from '../../utils/data';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {StackParamList} from '../../navigator/StackNavigation';
+import { useTranslation } from 'react-i18next';
 
 interface StudioProps {
   navigation: StackNavigationProp<StackParamList>;
 }
 
 const Studio = ({navigation}: StudioProps) => {
+  const theme = useColorScheme();
+  const styles = Styles(theme);
+  const {t} = useTranslation();
   const numColumns = 3;
   const [searchText, setSearchText] = useState('');
   const [filteredData, setFilteredData] = useState(studioData);
@@ -55,13 +60,13 @@ const Studio = ({navigation}: StudioProps) => {
     return (
       <>
         <View style={styles.detailTextContainer}>
-          <Text style={styles.detailText}> Please select your department</Text>
+          <Text style={styles.detailText}>{t('studio.detailText')}</Text>
         </View>
 
         <View style={styles.inputContainer}>
           <Image source={Icons.search} style={styles.searchIcon} />
           <TextInput
-            placeholder="Search department..."
+            placeholder={t('studio.placeholder')}
             placeholderTextColor={'gray'}
             style={styles.inputText}
             value={searchText}
@@ -97,7 +102,7 @@ const Studio = ({navigation}: StudioProps) => {
             )}
             ListEmptyComponent={() => (
               <View style={styles.emptyListContainer}>
-                <Text style={styles.emptyListText}>No studios found</Text>
+                <Text style={styles.emptyListText}>{t('studio.noRecords')}</Text>
               </View>
             )}
           />
@@ -107,7 +112,7 @@ const Studio = ({navigation}: StudioProps) => {
             style={styles.submitButton}
             activeOpacity={0.7}
             onPress={handleContinue}>
-            <Text style={styles.submitButtonText}>Continue</Text>
+            <Text style={styles.submitButtonText}>{t('studio.continue')}</Text>
           </TouchableOpacity>
         </View>
       </>
@@ -126,7 +131,7 @@ const Studio = ({navigation}: StudioProps) => {
           <Image source={Icons.back} style={styles.Left} />
         </TouchableOpacity>
         <View style={styles.contentHeader}>
-          <Text style={styles.headerText}>Help us to know you more</Text>
+          <Text style={styles.headerText}>{t('studio.title')}</Text>
         </View>
         <View style={styles.flatListContainer}>{renderFlatList()}</View>
       </View>

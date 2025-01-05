@@ -8,18 +8,23 @@ import {
   Image,
   TextInput,
   StatusBar,
+  useColorScheme,
 } from 'react-native';
 import {Icons} from '../../assets';
-import {styles} from './styles';
+import {Styles} from './styles';
 import CheckBox from 'react-native-check-box';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {StackParamList} from '../../navigator/StackNavigation';
+import { useTranslation } from 'react-i18next';
 
 interface FilterScreenProps {
   navigation: StackNavigationProp<StackParamList>;
 }
 
 const FilterScreen = ({navigation}: FilterScreenProps) => {
+  const theme = useColorScheme();
+  const styles = Styles(theme);
+  const {t} = useTranslation();
   const itemsArray = [
     {id: 1, title: 'Manager'},
     {id: 2, title: 'Screenwriter'},
@@ -102,19 +107,19 @@ const FilterScreen = ({navigation}: FilterScreenProps) => {
                 <Image source={Icons.back} style={styles.Left} />
               </TouchableOpacity>
               <View style={styles.contentHeader}>
-                <Text style={styles.headerText}>Help us to know you more</Text>
+                <Text style={styles.headerText}>{t('filterScreen.title')}</Text>
               </View>
               <View style={styles.detailTextContainer}>
                 <Text style={styles.detailText}>
                   {' '}
-                  Please select the studio you work for
+                  {t('filterScreen.subTitle')}
                 </Text>
               </View>
 
               <View style={styles.inputContainer}>
                 <Image source={Icons.search} style={styles.searchIcon} />
                 <TextInput
-                  placeholder="Search studio..."
+                  placeholder={t('filterScreen.placeholder')}
                   placeholderTextColor={'gray'}
                   keyboardType="default"
                   style={styles.inputText}
@@ -126,7 +131,7 @@ const FilterScreen = ({navigation}: FilterScreenProps) => {
           }
           ListEmptyComponent={
             <View style={styles.emptyList}>
-              <Text style={styles.emptyText}>No records found</Text>
+              <Text style={styles.emptyText}>{t('filterScreen.emptyText')}</Text>
             </View>
           }
         />
@@ -136,7 +141,7 @@ const FilterScreen = ({navigation}: FilterScreenProps) => {
           style={styles.submitButton}
           onPress={handleContinue}
           activeOpacity={0.7}>
-          <Text style={styles.submitButtonText}>Continue</Text>
+          <Text style={styles.submitButtonText}>{t('filterScreen.continue')}</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

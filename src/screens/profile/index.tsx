@@ -7,12 +7,14 @@ import {
   ScrollView,
   SafeAreaView,
   Dimensions,
+  useColorScheme,
 } from 'react-native';
-import {styles} from './styles.';
+import {Styles} from './styles';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {StackParamList} from '../../navigator/StackNavigation';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import {useTranslation} from 'react-i18next';
 import {Icons} from '../../assets';
 
 interface ProfileProps {
@@ -20,6 +22,9 @@ interface ProfileProps {
 }
 
 const Profile = ({navigation}: ProfileProps) => {
+  const theme = useColorScheme();
+  const styles = Styles(theme);
+  const {t} = useTranslation();
   const [imageUri, setImageUri] = useState('');
 
   const handleBack = () => {
@@ -69,17 +74,14 @@ const Profile = ({navigation}: ProfileProps) => {
             <Image source={Icons.back} style={styles.Left} />
           </TouchableOpacity>
           <TouchableOpacity onPress={handleSkip}>
-            <Text style={styles.skipText}>Skip</Text>
+            <Text style={styles.skipText}>{t('profile.header.skip')}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.contentHeader}>
-          <Text style={styles.headerText}>Profile Setup</Text>
+          <Text style={styles.headerText}>{t('profile.header.title')}</Text>
         </View>
         <View style={styles.detailTextContainer}>
-          <Text style={styles.detailText}>
-            Please add a profile photo to help your production team recognize
-            you in the field.
-          </Text>
+          <Text style={styles.detailText}>{t('profile.detailText')}</Text>
         </View>
         <ScrollView>
           <View style={styles.profileSection}>
@@ -105,7 +107,7 @@ const Profile = ({navigation}: ProfileProps) => {
             style={
               imageUri ? styles.submitButtonText : styles.disabledButtonText
             }>
-            Continue
+            {t('profile.button.continue')}
           </Text>
         </TouchableOpacity>
       </View>
@@ -133,7 +135,9 @@ const Profile = ({navigation}: ProfileProps) => {
             <View style={styles.container1}>
               <Image source={Icons.gallery} style={styles.iconImageSize} />
               <View style={styles.textArrange}>
-                <Text style={styles.name}>Upload From Gallery</Text>
+                <Text style={styles.name}>
+                  {t('profile.button.uploadFromGallery')}
+                </Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -141,7 +145,9 @@ const Profile = ({navigation}: ProfileProps) => {
             <View style={styles.container1}>
               <Image source={Icons.camera} style={styles.iconImageSize} />
               <View style={styles.textArrange}>
-                <Text style={styles.name}>Open Camera</Text>
+                <Text style={styles.name}>
+                  {t('profile.button.openCamera')}
+                </Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -149,7 +155,9 @@ const Profile = ({navigation}: ProfileProps) => {
             <View style={styles.container1}>
               <Image source={Icons.delete} style={styles.iconImageSize} />
               <View style={styles.textArrange}>
-                <Text style={styles.name}>Remove Icon</Text>
+                <Text style={styles.name}>
+                  {t('profile.button.removeIcon')}
+                </Text>
               </View>
             </View>
           </TouchableOpacity>

@@ -10,6 +10,6 @@ export const styles = StyleSheet.create({
   bcgImg: {
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
-    flex:1,
+    flex: 1,
   },
 });

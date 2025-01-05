@@ -5,26 +5,21 @@ import {
   TouchableOpacity,
   Image,
   Text,
-  StyleSheet,
   ImageSourcePropType,
-  ViewStyle,
-  TextStyle,
+  useColorScheme,
 } from 'react-native';
 import {TextInput} from 'react-native-paper';
-import {vw} from '../../utils/dimension';
+import { Styles } from './styles';
 
 interface CustomInputProps {
   name: any;
   setName: (text: string) => void;
   Icon: ImageSourcePropType;
-  InputStyle?: TextStyle;
-  inputContainerStyle?: ViewStyle;
   Error?: boolean;
   label: string;
   setError?: (hasError: boolean) => void;
   onChangeText: any;
   onFocus?: any;
-  iconStyle: any;
   onBlur?: any;
   errorText?: any;
   maxLength?: any;
@@ -35,27 +30,31 @@ const CustomInputBox = ({
   name,
   label,
   Icon,
-  InputStyle,
-  inputContainerStyle,
   Error,
   onChangeText,
-  iconStyle,
   errorText,
   maxLength,
   keyboardType,
 }: CustomInputProps) => {
+  const theme = useColorScheme();
+  const styles = Styles(theme);
   return (
     <>
-      <View style={[inputContainerStyle, Error ? styles.errorContainer : null]}>
-        <TouchableOpacity activeOpacity={1} style={styles.telephoneButton}>
-          <Image source={Icon} style={iconStyle} />
+      <View
+        style={[styles.inputContainer, Error ? styles.errorContainer : null]}>
+        <TouchableOpacity activeOpacity={1} style={styles.iconButton}>
+          <Image
+            source={Icon}
+            style={[styles.iconStyle, {tintColor: Error ? 'red' : 'grey'}]}
+          />
         </TouchableOpacity>
         <TextInput
-          style={InputStyle}
+          style={[styles.phoneInput]}
           label={label}
           keyboardType={keyboardType}
           value={name}
           maxLength={maxLength}
+          textColor= {theme === 'dark' ? '#FFF' : '#000'}
           onChangeText={onChangeText}
           mode="flat"
           underlineStyle={{
@@ -77,25 +76,3 @@ const CustomInputBox = ({
 };
 
 export default CustomInputBox;
-const styles = StyleSheet.create({
-  telephoneButton: {
-    paddingHorizontal: vw(14),
-    borderColor: '#ccc',
-    borderRightWidth: 1,
-    marginRight: vw(4),
-  },
-
-  countryCodeButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  errorContainer: {
-    borderColor: 'red',
-  },
-  errorText: {
-    color: 'red',
-    fontSize: 12,
-    marginTop: vw(10),
-    textAlign: 'left',
-  },
-});

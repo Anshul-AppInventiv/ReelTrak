@@ -1,15 +1,18 @@
 import React, {useState} from 'react';
 import {View, Text, Image, TouchableOpacity} from 'react-native';
+import {useTheme} from '@react-navigation/native';
 import {StackParamList} from '../../navigator/StackNavigation';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {steps} from '../../utils/data';
-import {styles} from './styles';
+import {createStyles} from './styles';
 
 type TutorialScreenProps = {
   navigation: StackNavigationProp<StackParamList, 'TutorialScreen'>;
 };
 
 const TutorialScreen = ({navigation}: TutorialScreenProps) => {
+  const colors = useTheme().colors;
+  const styles = createStyles(colors);
   const [currentStep, setCurrentStep] = useState(0);
 
   const handleNext = () => {
@@ -56,7 +59,7 @@ const TutorialScreen = ({navigation}: TutorialScreenProps) => {
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
-          <Text style={styles.skipButtonText}>Skip</Text>
+          <Text style={{color: colors.text}}>Skip</Text>
         </TouchableOpacity>
       </View>
     </View>

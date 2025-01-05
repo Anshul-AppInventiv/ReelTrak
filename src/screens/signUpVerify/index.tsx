@@ -11,23 +11,28 @@ import {
   Image,
   StatusBar,
   SafeAreaView,
+  useColorScheme,
 } from 'react-native';
 import {Icons} from '../../assets';
-import {styles} from './styles';
+import {Styles} from './styles';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {StackParamList} from '../../navigator/StackNavigation';
+import {useTranslation} from 'react-i18next';
 
 interface SignUpVerifyProps {
   navigation: StackNavigationProp<StackParamList>;
-  route: {params: {phoneNumber: string}};
+  // route: {params: {phoneNumber: string}};
 }
 
-const SignUpVerify = ({navigation, route}: SignUpVerifyProps) => {
+const SignUpVerify = ({navigation}: SignUpVerifyProps) => {
+  const theme = useColorScheme();
+  const styles = Styles(theme);
   const [code, setCode] = useState(['', '', '', '']);
   const [attempts, setAttempts] = useState(0);
   const [error, setError] = useState('');
   const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
   const [timer, setTimer] = useState(30);
+  const {t} = useTranslation();
 
   const inputRefs = [
     useRef<TextInput>(null),
@@ -92,12 +97,12 @@ const SignUpVerify = ({navigation, route}: SignUpVerifyProps) => {
   const handleFocus = (index: number) => {
     setFocusedIndex(index);
   };
-  const {phoneNumber} = route.params;
-  const maskPhoneNumber = (phoneNumber: string) => {
-    const lastFourDigits = phoneNumber.slice(-4);
-    const maskedPart = '*'.repeat(phoneNumber.length - 4);
-    return maskedPart + lastFourDigits;
-  };
+  // const {phoneNumber} = route.params;
+  // const maskPhoneNumber = (phoneNumber: string) => {
+  //   const lastFourDigits = phoneNumber.slice(-4);
+  //   const maskedPart = '*'.repeat(phoneNumber.length - 4);
+  //   return maskedPart + lastFourDigits;
+  // };
   return (
     <SafeAreaView style={styles.mainContainer}>
       <StatusBar
@@ -110,11 +115,9 @@ const SignUpVerify = ({navigation, route}: SignUpVerifyProps) => {
           <Image source={Icons.back} style={styles.Left} />
         </TouchableOpacity>
         <View style={styles.titleContainer}>
-          <Text style={styles.title}>OTP Verification</Text>
-          <Text style={styles.subtitle}>
-            Enter the 4 digit code sent to your mobile number
-          </Text>
-          <Text style={styles.emailText}>{maskPhoneNumber(phoneNumber)}</Text>
+          <Text style={styles.title}>{t('otpVerification.title')}</Text>
+          <Text style={styles.subtitle}>{t('otpVerification.subtitle')}</Text>
+          <Text style={styles.mobileText}>****1234</Text>
         </View>
         <View style={styles.otpContainer}>
           {code.map((digit, index) => (
@@ -123,6 +126,8 @@ const SignUpVerify = ({navigation, route}: SignUpVerifyProps) => {
               ref={inputRefs[index]}
               onFocus={() => handleFocus(index)}
               placeholder="0"
+              cursorColor={'#000'}
+              placeholderTextColor={'gray'}
               value={digit}
               onChangeText={text => handleInputChange(text, index)}
               keyboardType="numeric"
@@ -146,12 +151,14 @@ const SignUpVerify = ({navigation, route}: SignUpVerifyProps) => {
           onPress={handleVerify}
           style={styles.button}
           activeOpacity={0.7}>
-          <Text style={styles.buttonText}>Verify OTP</Text>
+          <Text style={styles.buttonText}>{t('otpVerification.verify')}</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.signUpContainer}>
-        <Text style={styles.newAccountText}>Didn't receive the code? </Text>
+        <Text style={styles.newAccountText}>
+          {t('otpVerification.resend.prompt')}
+        </Text>
         <TouchableOpacity
           onPress={() =>
             Alert.alert(
@@ -165,7 +172,7 @@ const SignUpVerify = ({navigation, route}: SignUpVerifyProps) => {
               styles.resendText,
               {color: timer > 0 ? '#B0BCC9' : '#486284'},
             ]}>
-            Resend
+            {t('otpVerification.resend.resendText')}
           </Text>
         </TouchableOpacity>
       </View>

@@ -1,9 +1,10 @@
 import {StyleSheet} from 'react-native';
 import {vw, vh, SCREEN_HEIGHT} from '../../utils/dimension';
-export const styles = StyleSheet.create({
+export const Styles =(theme:any)=>
+   StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: '#F4F4F4',
+    backgroundColor: theme === 'dark' ? '#000' : '#F4F4F4',
   },
   subContainer: {
     marginTop: vh(20),
@@ -28,6 +29,7 @@ export const styles = StyleSheet.create({
   headerText: {
     fontSize: 24,
     fontWeight: 'bold',
+    color: theme === 'dark' ? '#FFF' : '#000',
   },
   detailTextContainer: {
     marginTop: vh(10),
@@ -85,6 +87,7 @@ export const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   inputText: {
+    color: theme === 'dark' ? '#FFF' : '#000',
     width:'93%',
     height: vh(40),
     marginLeft: vw(4),

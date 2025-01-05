@@ -1,6 +1,10 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {NavigationContainer} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  DarkTheme,
+  DefaultTheme,
+} from '@react-navigation/native';
 import SplashScreen from '../screens/splash';
 import Login from '../screens/login';
 import TutorialScreen from '../screens/tutorial';
@@ -12,6 +16,7 @@ import Studio from '../screens/studio';
 import Profile from '../screens/profile';
 import FilterScreen from '../screens/filterScreen';
 import Home from '../screens/home';
+import {useColorScheme} from 'react-native';
 
 export type StackParamList = {
   SplashScreen: undefined;
@@ -30,8 +35,9 @@ export type StackParamList = {
 const Stack = createNativeStackNavigator<StackParamList>();
 
 const StackNavigation = () => {
+  const theme = useColorScheme();
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={theme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack.Navigator
         initialRouteName="SplashScreen"
         screenOptions={{headerShown: false}}>

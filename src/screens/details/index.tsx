@@ -10,20 +10,25 @@ import {
   Image,
   Keyboard,
   TouchableWithoutFeedback,
+  useColorScheme,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {styles} from './styles';
+import {Styles} from './styles';
 import {Icons} from '../../assets';
 import {studioData} from '../../utils/data';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {StackParamList} from '../../navigator/StackNavigation';
+import { useTranslation } from 'react-i18next';
 
 interface DetailsProps {
   navigation: StackNavigationProp<StackParamList>;
 }
 
 const Details = ({navigation}: DetailsProps) => {
+  const theme = useColorScheme();
+  const styles = Styles(theme);
+  const {t} = useTranslation();
   const [selected, setSelected] = useState(0);
   const numColumns = 3;
   const [searchText, setSearchText] = useState('');
@@ -63,14 +68,14 @@ const Details = ({navigation}: DetailsProps) => {
               <View style={{paddingHorizontal: 20}}>
                 <View style={styles.detailTextContainer}>
                   <Text style={styles.detailText}>
-                    Please select the studio you work for
+                    {t('details.select')}
                   </Text>
                 </View>
 
                 <View style={styles.inputContainer}>
                   <Image source={Icons.search} style={styles.searchIcon} />
                   <TextInput
-                    placeholder="Search studio..."
+                    placeholder={t('details.placeholder')}
                     placeholderTextColor={'gray'}
                     style={styles.inputText}
                     value={searchText}
@@ -109,7 +114,7 @@ const Details = ({navigation}: DetailsProps) => {
             )}
             ListEmptyComponent={() => (
               <View style={styles.emptyListContainer}>
-                <Text style={styles.emptyListText}>No studios found</Text>
+                <Text style={styles.emptyListText}>{t('details.emptyText')}</Text>
               </View>
             )}
           />
@@ -128,12 +133,11 @@ const Details = ({navigation}: DetailsProps) => {
         />
         <View style={styles.subContainer}>
           <View style={styles.contentHeader}>
-            <Text style={styles.headerText}>Help us to know you more</Text>
+            <Text style={styles.headerText}>{t('details.title')}</Text>
           </View>
           <View style={styles.detailTextContainer}>
             <Text style={styles.detailText}>
-              Please indicate whether you are employed by a studio, production
-              company, or are a freelance worker.
+              {t('details.subTitle')}
             </Text>
           </View>
           <View style={styles.choiceContainer}>
@@ -148,7 +152,7 @@ const Details = ({navigation}: DetailsProps) => {
                   styles.buttonText,
                   selected === 1 ? styles.selectedButtonText : null,
                 ]}>
-                Studio
+                {t('details.studio')}
               </Text>
             </TouchableOpacity>
 
@@ -163,7 +167,7 @@ const Details = ({navigation}: DetailsProps) => {
                   styles.buttonText,
                   selected === 2 ? styles.selectedButtonText : null,
                 ]}>
-                Production Co.
+                 {t('details.production')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -177,7 +181,7 @@ const Details = ({navigation}: DetailsProps) => {
                   styles.buttonText,
                   selected === 3 ? styles.selectedButtonText : null,
                 ]}>
-                Freelance
+                 {t('details.freelance')}
               </Text>
             </TouchableOpacity>
           </View>
@@ -189,7 +193,7 @@ const Details = ({navigation}: DetailsProps) => {
             style={styles.submitButton}
             onPress={handleContinue}
             activeOpacity={0.7}>
-            <Text style={styles.submitButtonText}>Continue</Text>
+            <Text style={styles.submitButtonText}>{t('details.continue')}</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>

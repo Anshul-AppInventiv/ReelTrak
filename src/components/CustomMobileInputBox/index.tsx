@@ -6,27 +6,22 @@ import {
   Image,
   Text,
   ImageSourcePropType,
-  ViewStyle,
-  TextStyle,
+  useColorScheme,
 } from 'react-native';
-import CountryPicker, {
-  Country,
-} from 'react-native-country-picker-modal';
+import CountryPicker, {Country} from 'react-native-country-picker-modal';
 import {TextInput} from 'react-native-paper';
-import {styles} from './styles';
+import {Styles} from './styles';
+import {validatePhoneNumber} from '../../utils/validations';
 
 interface CustomMobileInputBoxProps {
   countryCode?: any;
   callingCode?: string;
+  label: string;
   phoneNumber: string;
   setPhoneNumber: (text: string) => void;
   onSelect?: (country: Country) => void;
   setPickerVisible?: any;
-  telephoneIcon: ImageSourcePropType;
-  flagContainerStyle?: ViewStyle;
-  countryCodeTextStyle?: TextStyle;
-  phoneInputStyle?: TextStyle;
-  inputContainerStyle?: ViewStyle;
+  Icon: ImageSourcePropType;
   error: boolean;
   setError: (hasError: boolean) => void;
   errorText?: string;
@@ -35,23 +30,18 @@ interface CustomMobileInputBoxProps {
 const CustomMobileInputBox = ({
   countryCode,
   callingCode,
+  label,
   phoneNumber,
   setPhoneNumber,
   onSelect,
   setPickerVisible,
-  telephoneIcon,
-  flagContainerStyle,
-  countryCodeTextStyle,
-  phoneInputStyle,
-  inputContainerStyle,
+  Icon,
   error,
   setError,
   errorText,
 }: CustomMobileInputBoxProps) => {
-  const validatePhoneNumber = (number: string) => {
-    const phoneRegex = /^[0-9]{5,13}$/;
-    return phoneRegex.test(number);
-  };
+  const theme = useColorScheme();
+  const styles = Styles(theme);
   const handlePhoneNumberChange = (text: string) => {
     setPhoneNumber(text);
     if (text === '') {
@@ -64,9 +54,13 @@ const CustomMobileInputBox = ({
   };
   return (
     <>
-      <View style={[inputContainerStyle, error ? styles.errorContainer : null]}>
+      <View
+        style={[styles.inputContainer, error ? styles.errorContainer : null]}>
         <TouchableOpacity activeOpacity={1} style={styles.telephoneButton}>
-          <Image source={telephoneIcon} style={styles.telephoneImg} />
+          <Image
+            source={Icon}
+            style={[styles.iconStyle, {tintColor: error ? 'red' : 'grey'}]}
+          />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.countryCodeButton}
@@ -79,18 +73,19 @@ const CustomMobileInputBox = ({
             withFilter={true}
             onSelect={onSelect}
             visible={false}
-            containerButtonStyle={flagContainerStyle}
+            containerButtonStyle={styles.flagContainer}
           />
           <Text
             onPress={() => setPickerVisible(setPickerVisible)}
-            style={countryCodeTextStyle}>
+            style={styles.countryCodeText}>
             {callingCode}
           </Text>
         </TouchableOpacity>
         <TextInput
-          style={phoneInputStyle}
-          label={'Mobile number'}
+          style={styles.phoneInputMobile}
+          label={label}
           keyboardType="phone-pad"
+          textColor= {theme === 'dark' ? '#FFF' : '#000'}
           maxLength={13}
           value={phoneNumber}
           onChangeText={handlePhoneNumberChange}

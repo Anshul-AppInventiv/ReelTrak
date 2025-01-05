@@ -6,15 +6,24 @@ import {
   Image,
   Keyboard,
   TouchableWithoutFeedback,
+  useColorScheme,
+  I18nManager,
 } from 'react-native';
+
 import React, {useState} from 'react';
-import {styles} from './styles';
+import {Styles} from './styles';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import CountryPicker, {CountryCode} from 'react-native-country-picker-modal';
+import {CountryCode} from 'react-native-country-picker-modal';
 import CustomMobileInputBox from '../../components/CustomMobileInputBox';
 import CustomInputBox from '../../components/CustomInput';
+import CustomButton from '../../components/CustomButton';
+import LanguageModal from '../../components/LanguageModal';
 import {validateEmail, validateName} from '../../utils/validations';
+import {useTranslation} from 'react-i18next';
+import i18n from '../../locales/i18n';
 import {Icons} from '../../assets';
+import RNRestart from 'react-native-restart';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface SignUpProps {
   onClose?: any;
@@ -22,6 +31,54 @@ interface SignUpProps {
 }
 
 const SignUp = ({navigation}: SignUpProps) => {
+  const theme = useColorScheme();
+  const styles = Styles(theme);
+
+  const {t} = useTranslation();
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [languages, setLanguages] = useState([
+    {code: 'English', name: 'English'},
+    {code: 'Spanish', name: 'Español'},
+    {code: 'Hindi', name: 'हिंदी'},
+    {code: 'French', name: 'Français'},
+    {code: 'Russian', name: 'Русский'},
+    {code: 'Urdu', name: 'اردو'},
+  ]);
+
+  const toggleModal = () => {
+    setModalVisible(!modalVisible);
+  };
+
+  // const changeLanguage = (langCode: string | undefined) => {
+  //   const isRTL = ['Urdu'].includes(langCode || '');
+  //   I18nManager.forceRTL(isRTL);
+
+  //   if (!isRTL) {
+  //     I18nManager.forceRTL(false);
+  //   }
+
+  //   i18n.changeLanguage(langCode);
+  //   RNRestart.Restart();
+  //   toggleModal();
+  // };
+
+  const changeLanguage = async (langCode: string | undefined) => {
+    const rtlLanguages = ['Urdu'];
+    const isRTL = rtlLanguages.includes(langCode || '');
+
+    if (I18nManager.isRTL !== isRTL) {
+      I18nManager.forceRTL(isRTL);
+
+      await AsyncStorage.setItem('i18n-locale', langCode || '');
+      await AsyncStorage.setItem('i18n-rtl', isRTL.toString());
+
+      RNRestart.Restart();
+    } else {
+      i18n.changeLanguage(langCode);
+      toggleModal();
+    }
+  };
   const [countryCode, setCountryCode] = useState<CountryCode>('US');
   const [callingCode, setCallingCode] = useState('+1');
   const [firstName, setFirstName] = useState('');
@@ -101,125 +158,92 @@ const SignUp = ({navigation}: SignUpProps) => {
         />
         <View style={styles.subContainer}>
           <View style={styles.contentHeader}>
-            <Text style={styles.headerText}>Create Your Account</Text>
+            <Text style={styles.headerText}>{t('signUp.title')}</Text>
           </View>
           <View style={styles.detailTextContainer}>
-            <Text style={styles.detailText}>
-              Get started by filling in your details below
-            </Text>
+            <Text style={styles.detailText}>{t('signUp.subTitle')}</Text>
           </View>
 
           <CustomInputBox
             name={firstName}
-            label="First Name"
+            label={t('signUp.firstNameLabel')}
             maxLength={25}
             keyboardType={'name-phone-pad'}
             onChangeText={handleFirstNameChange}
-            iconStyle={styles.iconStyle}
             setName={setFirstName}
             Icon={Icons.user}
-            InputStyle={styles.phoneInput}
-            inputContainerStyle={styles.inputContainer}
             Error={firstNameError}
             setError={setFirstNameError}
             errorText={
-              'Please use only alphabetical letters and minimum length is 3 characters.'
+              t('signUp.error.name')
             }
           />
 
           <CustomInputBox
             name={lastName}
-            label="Last Name"
+            label={t('signUp.lastNameLabel')}
             maxLength={25}
             keyboardType="name-phone-pad"
             onChangeText={handleLastNameChange}
-            iconStyle={styles.iconStyle}
             setName={setLastName}
             Icon={Icons.user}
-            InputStyle={styles.phoneInput}
-            inputContainerStyle={styles.inputContainer}
             Error={lastNameError}
             setError={setLastNameError}
             errorText={
-              'Please use only alphabetical letters and minimum length is 3 characters.'
+              t('signUp.error.name')
             }
           />
 
           <CustomInputBox
             name={email}
-            label="Email Address"
+            label={t('signUp.emailLabel')}
             maxLength={50}
             keyboardType={'email-address'}
             onChangeText={handleEmailChange}
             setName={setEmail}
             Icon={Icons.email}
-            iconStyle={styles.iconStyle}
-            InputStyle={styles.phoneInput}
-            inputContainerStyle={styles.inputContainer}
             Error={emailError}
             setError={setEmailError}
-            errorText={'Please enter valid email'}
+            errorText={
+              t('signUp.error.email')
+            }
           />
 
           <CustomMobileInputBox
+            label={t('signUp.phoneLabel')}
             countryCode={countryCode}
             callingCode={callingCode}
             phoneNumber={phoneNumber}
             setPhoneNumber={setPhoneNumber}
             onSelect={onSelect}
             setPickerVisible={setPickerVisible}
-            telephoneIcon={Icons.telephone}
-            flagContainerStyle={styles.flagContainer}
-            countryCodeTextStyle={styles.countryCodeText}
-            phoneInputStyle={styles.phoneInputMobile}
-            inputContainerStyle={styles.inputContainer}
+            Icon={Icons.telephone}
             error={error}
             setError={setError}
-            errorText="Mobile no. should be min 5 digit and max 13 digit."
+            errorText={
+              t('signUp.error.mobile')
+            }
           />
           <View style={styles.consentContainer}>
-            <TouchableOpacity onPress={toggleImage}>
+            <TouchableOpacity
+              onPress={toggleImage}
+              style={styles.consentButton}>
               <Image
                 source={isChecked ? Icons.checked : Icons.unchecked}
                 style={styles.uncheckedImg}
               />
             </TouchableOpacity>
 
-            <Text style={styles.consentText}>
-              By accepting, you agree to our Privacy Policy and Terms of Use
-            </Text>
+            <Text style={styles.consentText}>{t('signUp.privacyPolicy')}</Text>
           </View>
-          <TouchableOpacity
-            style={[
-              styles.submitButton,
-              isButtonDisabled && styles.disabledButton,
-            ]}
+          <CustomButton
+            title={t('signUp.nextButton')}
             onPress={handleNext}
-            activeOpacity={0.7}
-            disabled={isButtonDisabled}>
-            <Text
-              style={[
-                styles.submitButtonText,
-                isButtonDisabled && styles.disabledButtonText,
-              ]}>
-              Next
-            </Text>
-          </TouchableOpacity>
-
-          {isPickerVisible && (
-            <CountryPicker
-              countryCode={countryCode}
-              withFilter={true}
-              withFlag={true}
-              withCallingCode={true}
-              onSelect={onSelect}
-              onClose={() => setPickerVisible(false)}
-              visible={isPickerVisible}
-            />
-          )}
+            isButtonDisabled={isButtonDisabled}
+          />
         </View>
         <View style={styles.loginContainer}>
-          <Text style={styles.accountText}>Already have an account?</Text>
+          <Text style={styles.accountText}>{t('signUp.alreadyAccount')}</Text>
           <TouchableOpacity
             onPress={() =>
               navigation.reset({
@@ -227,9 +251,20 @@ const SignUp = ({navigation}: SignUpProps) => {
                 routes: [{name: 'Login'}],
               })
             }>
-            <Text style={styles.loginText}> Login</Text>
+            <Text style={styles.loginText}>{t('signUp.login')}</Text>
           </TouchableOpacity>
         </View>
+        <LanguageModal
+          modalVisible={modalVisible}
+          toggleModal={toggleModal}
+          title="Select Language"
+          languages={languages}
+          changeLanguage={changeLanguage}
+        />
+
+        <TouchableOpacity onPress={toggleModal} style={styles.languageButton}>
+          <Text style={styles.languageText}>{i18n.language}</Text>
+        </TouchableOpacity>
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );

@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, Image} from 'react-native';
+import {View, Image, useColorScheme} from 'react-native';
 import { Images } from '../../assets';
 import { styles } from './styles';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -9,6 +9,9 @@ type SplashScreenProps = {
   navigation:StackNavigationProp<StackParamList, 'SplashScreen'>};
 
 const SplashScreen: React.FC<SplashScreenProps> = ({navigation}:any) => {
+
+  const theme = useColorScheme();
+  console.log('Current Theme====>', theme);
   useEffect(() => {
     const timer = setTimeout(() => {
       navigation.navigate('TutorialScreen');
