@@ -1,3 +1,5 @@
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable react/self-closing-comp */
 import React from 'react';
 import {
   Modal,
@@ -6,8 +8,9 @@ import {
   FlatList,
   TouchableOpacity,
   Button,
+  TouchableWithoutFeedback,
 } from 'react-native';
-import { styles } from './styles';
+import {styles} from './styles';
 
 interface LanguageItem {
   code: string;
@@ -38,6 +41,10 @@ const LanguageModal = ({
       visible={modalVisible}
       onRequestClose={toggleModal}>
       <View style={[styles.modalContainer]}>
+        <TouchableWithoutFeedback onPress={toggleModal}>
+          <View style={styles.subContainer}></View>
+        </TouchableWithoutFeedback>
+
         <View style={[styles.modalContent]}>
           <Text style={[styles.modalTitle]}>{title}</Text>
 
@@ -59,6 +66,5 @@ const LanguageModal = ({
     </Modal>
   );
 };
-
 
 export default LanguageModal;

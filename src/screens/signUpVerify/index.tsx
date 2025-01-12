@@ -21,7 +21,6 @@ import {useTranslation} from 'react-i18next';
 
 interface SignUpVerifyProps {
   navigation: StackNavigationProp<StackParamList>;
-  // route: {params: {phoneNumber: string}};
 }
 
 const SignUpVerify = ({navigation}: SignUpVerifyProps) => {
@@ -97,12 +96,7 @@ const SignUpVerify = ({navigation}: SignUpVerifyProps) => {
   const handleFocus = (index: number) => {
     setFocusedIndex(index);
   };
-  // const {phoneNumber} = route.params;
-  // const maskPhoneNumber = (phoneNumber: string) => {
-  //   const lastFourDigits = phoneNumber.slice(-4);
-  //   const maskedPart = '*'.repeat(phoneNumber.length - 4);
-  //   return maskedPart + lastFourDigits;
-  // };
+
   return (
     <SafeAreaView style={styles.mainContainer}>
       <StatusBar

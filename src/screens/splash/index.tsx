@@ -23,7 +23,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({navigation}:any) => {
   return (
     <View style={styles.container}>
         <Image
-        source={{uri:Images.splash}}
+        source={Images.splash}
         style={styles.splashlogo}/>
     </View>
   );

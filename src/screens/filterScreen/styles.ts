@@ -1,5 +1,6 @@
 import {Platform, StyleSheet} from 'react-native';
 import {vw, vh, SCREEN_HEIGHT} from '../../utils/dimension';
+import { Colors } from '../../utils/colors';
 export const Styles =(theme:any)=>
    StyleSheet.create({
   safeareastyle: {
@@ -122,7 +123,7 @@ export const Styles =(theme:any)=>
     paddingVertical: vh(14),
   },
   submitButton: {
-    backgroundColor: '#486284',
+    backgroundColor: Colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',

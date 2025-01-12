@@ -10,8 +10,7 @@ import {
   useColorScheme,
   I18nManager,
 } from 'react-native';
-
-import React, {useState} from 'react';
+import React, {useReducer, useState} from 'react';
 import {Styles} from './styles';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {CountryCode} from 'react-native-country-picker-modal';
@@ -25,19 +24,21 @@ import i18n from '../../locales/i18n';
 import {Icons} from '../../assets';
 import RNRestart from 'react-native-restart';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {formReducer, initialState} from './formReducer';
 
 interface SignUpProps {
   onClose?: any;
   navigation: any;
 }
 
-const SignUp = ({navigation}: SignUpProps) => {
+const Dummy = ({navigation}: SignUpProps) => {
   const theme = useColorScheme();
   const styles = Styles(theme);
 
   const {t} = useTranslation();
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [state, dispatch] = useReducer(formReducer, initialState);
   const [languages, setLanguages] = useState([
     {code: 'English', name: 'English'},
     {code: 'Spanish', name: 'Español'},
@@ -50,19 +51,6 @@ const SignUp = ({navigation}: SignUpProps) => {
   const toggleModal = () => {
     setModalVisible(!modalVisible);
   };
-
-  // const changeLanguage = (langCode: string | undefined) => {
-  //   const isRTL = ['Urdu'].includes(langCode || '');
-  //   I18nManager.forceRTL(isRTL);
-
-  //   if (!isRTL) {
-  //     I18nManager.forceRTL(false);
-  //   }
-
-  //   i18n.changeLanguage(langCode);
-  //   RNRestart.Restart();
-  //   toggleModal();
-  // };
 
   const changeLanguage = async (langCode: string | undefined) => {
     const rtlLanguages = ['Urdu'];
@@ -82,16 +70,10 @@ const SignUp = ({navigation}: SignUpProps) => {
   };
   const [countryCode, setCountryCode] = useState<CountryCode>('US');
   const [callingCode, setCallingCode] = useState('+1');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isPickerVisible, setPickerVisible] = useState(false);
   const [error, setError] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
-  const [emailError, setEmailError] = useState(false);
-  const [firstNameError, setFirstNameError] = useState(false);
-  const [lastNameError, setLastNameError] = useState(false);
 
   const toggleImage = () => {
     setIsChecked(!isChecked);
@@ -101,36 +83,20 @@ const SignUp = ({navigation}: SignUpProps) => {
     setCallingCode(`+${country.callingCode[0]}`);
     setPickerVisible(false);
   };
-  const handleEmailChange = (text: string) => {
-    setEmail(text);
-    if (text === '') {
-      setEmailError(false);
-    } else if (validateEmail(text)) {
-      setEmailError(false);
-    } else {
-      setEmailError(true);
-    }
-  };
 
-  const handleFirstNameChange = (text: string) => {
-    setFirstName(text);
-    if (text === '') {
-      setFirstNameError(false);
-    } else if (validateName(text)) {
-      setFirstNameError(false);
-    } else {
-      setFirstNameError(true);
-    }
-  };
+  const handleInputChange = (field: string, value: string) => {
+    dispatch({type: 'SET_INPUT', field, value});
 
-  const handleLastNameChange = (text: string) => {
-    setLastName(text);
-    if (text === '') {
-      setLastNameError(false);
-    } else if (validateName(text)) {
-      setLastNameError(false);
-    } else {
-      setLastNameError(true);
+    switch (field) {
+      case 'email':
+        dispatch({type: 'SET_ERROR', field: 'emailError', value: value !== '' && !validateEmail(value)});
+        break;
+        case 'firstName':
+          dispatch({type: 'SET_ERROR', field: 'firstNameError', value: value !== '' && !validateName(value)});
+          break;
+        case 'lastName':
+          dispatch({type: 'SET_ERROR', field: 'lastNameError', value: value !== '' && !validateName(value)});
+          break;
     }
   };
 
@@ -142,13 +108,13 @@ const SignUp = ({navigation}: SignUpProps) => {
 
   const isButtonDisabled =
     phoneNumber.length < 5 ||
-    firstNameError ||
-    lastNameError ||
-    emailError ||
+    state.firstNameError ||
+    state.lastNameError ||
+    state.emailError ||
     !isChecked ||
-    !validateName(firstName) ||
-    !validateName(lastName) ||
-    !validateEmail(email);
+    !validateName(state.firstName) ||
+    !validateName(state.lastName) ||
+    !validateEmail(state.email);
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaView style={styles.mainContainer}>
@@ -166,41 +132,35 @@ const SignUp = ({navigation}: SignUpProps) => {
           </View>
 
           <CustomInputBox
-            name={firstName}
+            name={state.firstName}
             label={t('signUp.firstNameLabel')}
             maxLength={25}
             keyboardType={'name-phone-pad'}
-            onChangeText={handleFirstNameChange}
-            setName={setFirstName}
+            onChangeText={(name: string) => handleInputChange('firstName', name)}
             Icon={Icons.user}
-            Error={firstNameError}
-            setError={setFirstNameError}
+            Error={state.firstNameError}
             errorText={t('signUp.error.name')}
           />
 
           <CustomInputBox
-            name={lastName}
+            name={state.lastName}
             label={t('signUp.lastNameLabel')}
             maxLength={25}
             keyboardType="name-phone-pad"
-            onChangeText={handleLastNameChange}
-            setName={setLastName}
+            onChangeText={(name: string) => handleInputChange('lastName', name)}
             Icon={Icons.user}
-            Error={lastNameError}
-            setError={setLastNameError}
+            Error={state.lastNameError}
             errorText={t('signUp.error.name')}
           />
 
           <CustomInputBox
-            name={email}
+            name={state.email}
             label={t('signUp.emailLabel')}
             maxLength={50}
             keyboardType={'email-address'}
-            onChangeText={handleEmailChange}
-            setName={setEmail}
+            onChangeText={(name: string) => handleInputChange('email', name)}
             Icon={Icons.email}
-            Error={emailError}
-            setError={setEmailError}
+            Error={state.emailError}
             errorText={t('signUp.error.email')}
           />
 
@@ -262,4 +222,4 @@ const SignUp = ({navigation}: SignUpProps) => {
   );
 };
 
-export default SignUp;
+export default Dummy;

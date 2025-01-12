@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {SCREEN_WIDTH, SCREEN_HEIGHT, vw, vh} from '../../utils/dimension';
+import { Colors } from '../../utils/colors';
 
 export const styles = StyleSheet.create({
   modalContainer: {
@@ -79,7 +80,7 @@ export const styles = StyleSheet.create({
     elevation: 5,
   },
   submitButton: {
-    backgroundColor: '#486284',
+    backgroundColor: Colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',

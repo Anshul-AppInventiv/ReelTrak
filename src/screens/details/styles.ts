@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {vw, vh, SCREEN_HEIGHT} from '../../utils/dimension';
+import { Colors } from '../../utils/colors';
 export const Styles = (theme: any) =>
   StyleSheet.create({
     mainContainer: {
@@ -142,7 +143,7 @@ export const Styles = (theme: any) =>
       justifyContent: 'center',
     },
     submitButton: {
-      backgroundColor: '#486284',
+      backgroundColor: Colors.primary,
       alignItems: 'center',
       justifyContent: 'center',
       width: '85%',

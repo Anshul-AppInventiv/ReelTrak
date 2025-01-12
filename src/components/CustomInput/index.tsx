@@ -13,7 +13,7 @@ import { Styles } from './styles';
 
 interface CustomInputProps {
   name: any;
-  setName: (text: string) => void;
+  setName?: (text: string) => void;
   Icon: ImageSourcePropType;
   Error?: boolean;
   label: string;

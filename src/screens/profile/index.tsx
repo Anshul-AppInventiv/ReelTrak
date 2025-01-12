@@ -87,7 +87,7 @@ const Profile = ({navigation}: ProfileProps) => {
           <View style={styles.profileSection}>
             <Image
               style={styles.profileImage}
-              source={imageUri ? {uri: imageUri} : Icons.account}
+              source={imageUri ? {uri: imageUri} : Icons.accountDark}
             />
             <View style={styles.addImgContainer}>
               <TouchableOpacity

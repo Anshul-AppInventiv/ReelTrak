@@ -7,6 +7,10 @@ export const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     backgroundColor: 'rgba(0, 0, 0, 0.3)',
   },
+  subContainer:{
+    width:'100%',
+    height:'100%',
+  },
   modalContent: {
     backgroundColor: 'white',
     borderRadius: 30,

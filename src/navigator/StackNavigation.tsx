@@ -17,6 +17,7 @@ import Profile from '../screens/profile';
 import FilterScreen from '../screens/filterScreen';
 import Home from '../screens/home';
 import {useColorScheme} from 'react-native';
+import Dummy from '../screens/dummy_SignUp';
 
 export type StackParamList = {
   SplashScreen: undefined;
@@ -30,6 +31,7 @@ export type StackParamList = {
   Profile: undefined;
   FilterScreen: undefined;
   Home: undefined;
+  Dummy:undefined;
 };
 
 const Stack = createNativeStackNavigator<StackParamList>();
@@ -39,7 +41,7 @@ const StackNavigation = () => {
   return (
     <NavigationContainer theme={theme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack.Navigator
-        initialRouteName="SplashScreen"
+        initialRouteName="Dummy"
         screenOptions={{headerShown: false}}>
         <Stack.Screen name="Details" component={Details} />
         <Stack.Screen name="SplashScreen" component={SplashScreen} />
@@ -52,6 +54,7 @@ const StackNavigation = () => {
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="FilterScreen" component={FilterScreen} />
         <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Dummy" component={Dummy} />
       </Stack.Navigator>
     </NavigationContainer>
   );
