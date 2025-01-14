@@ -6,14 +6,15 @@ import {
   Text,
   TouchableWithoutFeedback,
   Keyboard,
+  useColorScheme,
 } from 'react-native';
 import {Icons} from '../../assets';
-import {styles} from './styles';
-import CountryPicker, {CountryCode} from 'react-native-country-picker-modal';
+import {Styles} from './styles';
 import CustomMobileInputBox from '../CustomMobileInputBox';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useTranslation} from 'react-i18next';
 import {StackParamList} from '../../navigator/StackNavigation';
+import CustomButton from '../CustomButton';
 
 interface CustomModalProps {
   visible: boolean;
@@ -25,8 +26,10 @@ const CustomModal = ({
   onClose,
   navigation,
 }: CustomModalProps) => {
+  const theme = useColorScheme();
+  const styles = Styles(theme);
   const {t} = useTranslation();
-  const [countryCode, setCountryCode] = useState<CountryCode>('US');
+  const [countryCode, setCountryCode] = useState('US');
   const [callingCode, setCallingCode] = useState('+1');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isPickerVisible, setPickerVisible] = useState(false);
@@ -41,13 +44,10 @@ const CustomModal = ({
     if (!error) {
       onClose();
       if (navigation) {
-        navigation.reset(
-          {
-            index: 0,
-            routes: [{name: 'Verifyotp'}],
-          },
-          {phoneNumber},
-        );
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'Verifyotp'}],
+        });
       }
     }
   };
@@ -89,35 +89,12 @@ const CustomModal = ({
                 setError={setError}
                 errorText={t('login.mobileError')}
               />
-
-              <TouchableOpacity
-                style={[
-                  styles.submitButton,
-                  isButtonDisabled && styles.disabledButton,
-                ]}
+              <CustomButton
+                title={t('signUp.nextButton')}
                 onPress={handleNext}
-                activeOpacity={0.7}
-                disabled={isButtonDisabled}>
-                <Text
-                  style={[
-                    styles.submitButtonText,
-                    isButtonDisabled && styles.disabledButtonText,
-                  ]}>
-                  {t('login.nextButton')}
-                </Text>
-              </TouchableOpacity>
+                isButtonDisabled={isButtonDisabled}
+              />
 
-              {isPickerVisible && (
-                <CountryPicker
-                  countryCode={countryCode}
-                  withFilter={true}
-                  withFlag={true}
-                  withCallingCode={true}
-                  onSelect={onSelect}
-                  onClose={() => setPickerVisible(false)}
-                  visible={isPickerVisible}
-                />
-              )}
             </View>
             <View style={styles.signUpContainer}>
               <Text style={styles.newAccountText}>

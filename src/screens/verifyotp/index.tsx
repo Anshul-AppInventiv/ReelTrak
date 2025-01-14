@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect, useRef} from 'react';
@@ -11,9 +10,10 @@ import {
   Image,
   StatusBar,
   SafeAreaView,
+  useColorScheme,
 } from 'react-native';
 import {Icons} from '../../assets';
-import {styles} from './styles';
+import {Styles} from './styles';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {StackParamList} from '../../navigator/StackNavigation';
 import {useTranslation} from 'react-i18next';
@@ -23,6 +23,8 @@ interface VerifyotpProps {
 }
 
 const Verifyotp = ({navigation}: VerifyotpProps) => {
+  const theme = useColorScheme();
+  const styles = Styles(theme);
   const {t} = useTranslation();
   const [code, setCode] = useState(['', '', '', '']);
   const [attempts, setAttempts] = useState(0);
@@ -120,10 +122,8 @@ const Verifyotp = ({navigation}: VerifyotpProps) => {
         </TouchableOpacity>
         <View style={styles.titleContainer}>
           <Text style={styles.title}>{t('otpVerification.title')}</Text>
-          <Text style={styles.subtitle}>
-            {t('otpVerification.subtitle')}
-          </Text>
-          <Text style={styles.emailText}>****2345</Text>
+          <Text style={styles.subtitle}>{t('otpVerification.subtitle')}</Text>
+          <Text style={styles.mobileText}>****2345</Text>
         </View>
         <View style={styles.otpContainer}>
           {code.map((digit, index) => (
@@ -160,7 +160,9 @@ const Verifyotp = ({navigation}: VerifyotpProps) => {
       </View>
 
       <View style={styles.signUpContainer}>
-        <Text style={styles.newAccountText}>{t('otpVerification.resend.prompt')}</Text>
+        <Text style={styles.newAccountText}>
+          {t('otpVerification.resend.prompt')}
+        </Text>
         <TouchableOpacity
           onPress={() =>
             Alert.alert(
@@ -174,7 +176,7 @@ const Verifyotp = ({navigation}: VerifyotpProps) => {
               styles.resendText,
               {color: timer > 0 ? '#B0BCC9' : '#486284'},
             ]}>
-              {t('otpVerification.resend.resendText')}
+            {t('otpVerification.resend.resendText')}
           </Text>
         </TouchableOpacity>
       </View>

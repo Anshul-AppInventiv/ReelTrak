@@ -9,7 +9,7 @@ import {
   useColorScheme,
 } from 'react-native';
 import {TextInput} from 'react-native-paper';
-import { Styles } from './styles';
+import {Styles} from './styles';
 
 interface CustomInputProps {
   name: any;
@@ -54,7 +54,7 @@ const CustomInputBox = ({
           keyboardType={keyboardType}
           value={name}
           maxLength={maxLength}
-          textColor= {theme === 'dark' ? '#FFF' : '#000'}
+          textColor={theme === 'dark' ? '#FFF' : '#000'}
           onChangeText={onChangeText}
           mode="flat"
           underlineStyle={{

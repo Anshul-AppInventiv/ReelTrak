@@ -2,7 +2,7 @@ import {StyleSheet} from 'react-native';
 import {SCREEN_WIDTH, SCREEN_HEIGHT, vw, vh} from '../../utils/dimension';
 import { Colors } from '../../utils/colors';
 
-export const styles = StyleSheet.create({
+export const Styles = (theme: any) =>StyleSheet.create({
   modalContainer: {
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: SCREEN_HEIGHT / 1.5,
     borderRadius: 30,
-    backgroundColor: 'white',
+    backgroundColor: theme === 'dark' ? '#000' : '#FFF',
     paddingHorizontal: vw(22),
     paddingBottom: vh(20),
   },
@@ -24,6 +24,7 @@ export const styles = StyleSheet.create({
   headerText: {
     fontSize: 24,
     fontWeight: '900',
+    color: theme === 'dark' ? '#FFF' : '#000',
   },
   detailTextContainer: {
     marginTop: vh(10),
@@ -63,22 +64,23 @@ export const styles = StyleSheet.create({
   },
   countryCodeText: {
     fontSize: 16,
+    color: theme === 'dark' ? '#000' : '#FFF',
   },
-  phoneInput: {
-    width: '65%',
-    fontSize: 15,
-    backgroundColor: '#fff',
-    overflow: 'hidden',
-    fontWeight: '500',
-  },
-  disabledButton: {
-    backgroundColor: '#FFFFFF',
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.8,
-    shadowRadius: 3,
-    elevation: 5,
-  },
+  // phoneInput: {
+  //   width: '65%',
+  //   fontSize: 15,
+  //   backgroundColor: theme === 'dark' ? '#000' : '#FFF',
+  //   overflow: 'hidden',
+  //   fontWeight: '500',
+  // },
+  // disabledButton: {
+  //   backgroundColor: '#FFFFFF',
+  //   shadowColor: '#000',
+  //   shadowOffset: {width: 0, height: 2},
+  //   shadowOpacity: 0.8,
+  //   shadowRadius: 3,
+  //   elevation: 5,
+  // },
   submitButton: {
     backgroundColor: Colors.primary,
     alignItems: 'center',

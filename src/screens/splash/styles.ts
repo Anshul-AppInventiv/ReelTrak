@@ -12,6 +12,6 @@ export const styles = StyleSheet.create({
     width: SCREEN_WIDTH / 1.1,
     height: SCREEN_HEIGHT / 3,
     resizeMode: 'contain',
-    alignSelf:'center',
+    alignSelf: 'center',
   },
 });

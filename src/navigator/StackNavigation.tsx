@@ -41,7 +41,7 @@ const StackNavigation = () => {
   return (
     <NavigationContainer theme={theme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack.Navigator
-        initialRouteName="Dummy"
+        initialRouteName="SplashScreen"
         screenOptions={{headerShown: false}}>
         <Stack.Screen name="Details" component={Details} />
         <Stack.Screen name="SplashScreen" component={SplashScreen} />
